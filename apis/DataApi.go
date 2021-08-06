@@ -51,20 +51,13 @@ func (dataApi DataApi) Find(w http.ResponseWriter, r *http.Request) {
 
 func (dataApi DataApi) RemoveDataByID(w http.ResponseWriter, r *http.Request) {
 
-	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&dataApi)
-	if err != nil {
-		dataApi.Error(w, err)
-		return
-	}
-
 	db := connection.OpenConnection(config.DEV)
 	defer db.Close()
 
 	channelID := dataApi.QueryParam(r, "channelID")
 
 	dataModel := model.CreateYoutubeData(db)
-	err = dataModel.RemoveByID(channelID)
+	err := dataModel.RemoveByID(channelID)
 	if err != nil {
 		dataApi.Error(w, err)
 		return
